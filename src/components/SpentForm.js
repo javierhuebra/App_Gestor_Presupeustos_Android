@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Pressable, View, Text, StyleSheet, SafeAreaView, TextInput } from "react-native";
 
 import { Picker } from "@react-native-picker/picker";
 import globalStyles from "../styles";
 
-const SpentForm = ({ setModal }) => {
+const SpentForm = ({ setModal, handleBill }) => {
+
+    const [name, setName] = useState('')
+    const [quantity, setquantity] = useState('')
+    const [category, setCategory] = useState('')
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.containerBtnCancel}>
@@ -17,15 +22,17 @@ const SpentForm = ({ setModal }) => {
             </View>
 
             <View style={styles.form}>
-                
+
                 <Text style={styles.title}>New Spent</Text>
-                
+
 
                 <View style={styles.camp}>
                     <Text style={styles.label}>Spent Name</Text>
                     <TextInput
                         placeholder="Spent Name, ej. Food"
                         style={styles.input}
+                        value={name}
+                        onChangeText={setName}
                     />
                 </View>
 
@@ -35,13 +42,19 @@ const SpentForm = ({ setModal }) => {
                         placeholder="Spent Amount, ej. $350"
                         keyboardType="numeric"
                         style={styles.input}
+
+                        value={quantity}
+                        onChangeText={setquantity}
                     />
                 </View>
 
                 <View style={styles.camp}>
                     <Text style={styles.label}>Spent Category</Text>
                     <Picker
-                        
+                        selectedValue={category}
+                        onValueChange={(itemValue) => {
+                            setCategory(itemValue)
+                        }}
                     >
                         <Picker.Item label="-- Select --" value="" />
                         <Picker.Item label="Saving" value="saving" />
@@ -54,7 +67,11 @@ const SpentForm = ({ setModal }) => {
                     </Picker>
                 </View>
 
-                <Pressable style={styles.submitBtn}>
+                <Pressable 
+                style={styles.submitBtn}
+                onPress={() => handleBill({name, quantity, category})}
+                
+                >
                     <Text style={styles.submitBtnText}>Add Spent</Text>
                 </Pressable>
             </View>
@@ -70,57 +87,57 @@ const styles = StyleSheet.create({
         flex: 1
     },
 
-    form:{
+    form: {
         ...globalStyles.container
     },
-    camp:{
+    camp: {
         marginVertical: 10
     },
-    title:{
-        textAlign:'center',
+    title: {
+        textAlign: 'center',
         fontSize: 28,
         marginBottom: 40,
         color: '#64748B'
     },
-    label:{
+    label: {
         color: '#64748B',
-        textTransform:'uppercase',
+        textTransform: 'uppercase',
         fontSize: 16,
-        fontWeight:'bold'
+        fontWeight: 'bold'
     },
-    input:{
-        backgroundColor:'#F5F5F5',
+    input: {
+        backgroundColor: '#F5F5F5',
         padding: 10,
         borderRadius: 10,
         marginTop: 10
     },
-    submitBtnText:{
+    submitBtnText: {
         textAlign: 'center',
         color: '#FFF',
         fontWeight: 'bold',
-        textTransform:'uppercase'
+        textTransform: 'uppercase'
     },
-    submitBtn:{
+    submitBtn: {
         backgroundColor: '#3B82F6',
         padding: 10,
         marginTop: 20
     },
-    cancelBtn:{
+    cancelBtn: {
         backgroundColor: '#DB2777',
         padding: 10,
         marginTop: 20,
         marginHorizontal: 10,
-        paddingHorizontal:25,
-        
+        paddingHorizontal: 25,
+
     },
-    cancelBtnText:{
-        color:'#FFF',
-        textTransform:'uppercase',
-        fontWeight:'bold',
-        textAlign:'center'
+    cancelBtnText: {
+        color: '#FFF',
+        textTransform: 'uppercase',
+        fontWeight: 'bold',
+        textAlign: 'center'
     },
-    containerBtnCancel:{
-        
+    containerBtnCancel: {
+
     }
-    
+
 })

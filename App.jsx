@@ -37,6 +37,15 @@ const App = () => {
     }
   }
 
+  const handleBill = (bill) => {
+    //console.log(Object.values(bill)) revisa los valores, si le pongo .keys evalua el nombre tipo key: value
+
+    if (Object.values(bill).includes('')){
+      Alert.alert('Error', 'You must select all the requirements of the form (Spent name, Spent amount and Spent category)', [{text: 'ok'}])
+    } else {
+
+    }
+  }
 
   return (
     <View style={styles.containerBud}>
@@ -74,6 +83,7 @@ const App = () => {
         >
           <SpentForm
             setModal={setModal}
+            handleBill={handleBill}
           />
 
         </Modal>
