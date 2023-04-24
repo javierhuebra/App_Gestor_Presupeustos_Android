@@ -18,6 +18,6 @@ text:{
     textAlign:'center',
     textTransform:'uppercase',
     fontSize:35,
-    fontWeight:'bold'
+    fontWeight:'bold',
 }
 })

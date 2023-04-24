@@ -7,18 +7,20 @@ import { formatQuant } from "../helpers";
 const ControlBudget = ({ budget, bills }) => {
 
     const [aviable, setAviable] = useState(0)
-    const [spent, setSent] = useState(0)
+    const [spent, setSpent] = useState(0)
 
     
 
     useEffect(() => {
-        const totalSpent = bills.reduce((total, spen) => Number(spen.quant) + total, 0) //Metodos de arrays de javascript para sumar todo lo de un arreglo de objetos o arreglo normal
+        const totalSpent = bills.reduce((total, spen) => Number(spen.quantity) + total, 0) //Metodos de arrays de javascript para sumar todo lo de un arreglo de objetos o arreglo normal
         const totalAviable = budget - totalSpent
 
-        setSent(totalSpent)
+        setSpent(totalSpent)
         setAviable(totalAviable)
+
+        console.log(totalSpent)
         
-    },[])
+    },[bills])
 
     return (
         <View style={styles.container}>
@@ -60,7 +62,7 @@ export default ControlBudget
 const styles = StyleSheet.create({
     container: {
         ...globalStyles.container, //se hace un global style a veces se usa
-
+        
     },
     centerGraph: {
         alignItems: 'center'

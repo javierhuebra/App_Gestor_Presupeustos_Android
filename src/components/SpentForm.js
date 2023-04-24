@@ -51,6 +51,7 @@ const SpentForm = ({ setModal, handleBill }) => {
                 <View style={styles.camp}>
                     <Text style={styles.label}>Spent Category</Text>
                     <Picker
+                     style={styles.input}
                         selectedValue={category}
                         onValueChange={(itemValue) => {
                             setCategory(itemValue)
