@@ -9,7 +9,7 @@ const SpentList = ({ bills, setModal, setBill }) => {
             <Text style={styles.title}>Spent List</Text>
 
             {bills.length === 0 ?
-                <Text style={styles.noBill}>No hay gastos</Text>
+                <Text style={styles.noBill}>No Expenses</Text>
                 :
                 bills.map(bill => (
                     <Bill
