@@ -4,6 +4,8 @@ import globalStyles from "../styles";
 
 import { formatQuant } from "../helpers";
 
+
+
 const ControlBudget = ({ budget, bills }) => {
 
     const [aviable, setAviable] = useState(0)
@@ -18,17 +20,14 @@ const ControlBudget = ({ budget, bills }) => {
         setSpent(totalSpent)
         setAviable(totalAviable)
 
-        console.log(totalSpent)
+        /* console.log(totalSpent) */
         
     },[bills])
 
     return (
         <View style={styles.container}>
             <View style={styles.centerGraph}>
-                <Image
-                    style={styles.image}
-                    source={require('../img/grafico.jpg')}
-                />
+               {/* aca va el disquito complicado */}
 
             </View>
             <View style={styles.contText}>

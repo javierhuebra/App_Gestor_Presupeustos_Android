@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from "react-native"
 import Bill from "./Bill"
 
 
-const SpentList = ({ bills }) => {
+const SpentList = ({ bills, setModal, setBill }) => {
     return (
         <View style={styles.containerList}>
             <Text style={styles.title}>Spent List</Text>
@@ -15,6 +15,8 @@ const SpentList = ({ bills }) => {
                     <Bill
                         key={bill.id}
                         bill={bill}
+                        setModal={setModal}
+                        setBill={setBill}
                     />
                 )
             

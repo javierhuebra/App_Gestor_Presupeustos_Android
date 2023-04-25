@@ -30,7 +30,7 @@ const App = () => {
   const [budget, setBudget] = useState(0)
   const [bills, setBills] = useState([])
   const [modal, setModal] = useState(false)
-
+  const [bill, setBill] = useState({})
 
   const handleNewBudget = (budget) => {
     if (Number(budget) > 0) {
@@ -43,7 +43,7 @@ const App = () => {
   const handleBill = (bill) => {
     //console.log(Object.values(bill)) revisa los valores, si le pongo .keys evalua el nombre tipo key: value
 
-    if (Object.values(bill).includes('')) {
+    if ([bill.name, bill.category, bill.quantity].includes('')) {
       Alert.alert('Error',
         'You must select all the requirements of the form (Spent name, Spent amount and Spent category)',
         [{ text: 'ok' }])
@@ -51,15 +51,53 @@ const App = () => {
       return
     }
 
-    //Añadir el nuevo gasto al state
+    if (bill.id) {
+      const updatedBills = bills.map(billState => billState.id === bill.id ? bill : billState)
+      setBills(updatedBills)
+    } else {
+      //Añadir el nuevo gasto al state
 
-    bill.id = generateId()
+      bill.id = generateId()
 
-    bill.date = Date.now()
+      bill.date = Date.now()
 
-    setBills([...bills, bill])
+      setBills([...bills, bill])
+    }
 
     setModal(!modal)
+
+  }
+
+  const deleteBill = id => {
+
+    Alert.alert(
+      'Do you want to eliminate this expense?',
+      'A deleted expense cannot be recovered.',
+      [
+        { text: 'No', style: 'cancel' },
+        {
+          text: 'Yes, delete', onPress: () => {
+
+            const updatedBills = bills.filter(
+
+
+              billState => billState.id !== id
+
+            )
+
+
+           /*  console.log('----Nuevo dbug-----')
+            console.log('bills', bills)
+            console.log('el id es ', id)
+            console.log('updated bills', updatedBills) */
+
+            setBills(updatedBills)
+            setModal(!modal)
+            setBill({})
+          }
+        }
+      ]
+    )
 
   }
 
@@ -99,6 +137,8 @@ const App = () => {
         {isValidBudget && (
           <SpentList
             bills={bills}
+            setModal={setModal}
+            setBill={setBill}
           />
         )}
 
@@ -111,6 +151,9 @@ const App = () => {
           <SpentForm
             setModal={setModal}
             handleBill={handleBill}
+            bill={bill}
+            setBill={setBill}
+            deleteBill={deleteBill}
           />
 
         </Modal>
@@ -140,16 +183,17 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#3b82f6',
     paddingTop: 20,
-    minHeight:400
+    minHeight: 400
   },
   image: {
-    width: 60,
-    height: 60,
+    width: 70,
+    height: 70,
   },
   contModal: {
     position: 'absolute',
     bottom: 40,
     right: 30,
+    /* backgroundColor:'red' */
 
   }
 });

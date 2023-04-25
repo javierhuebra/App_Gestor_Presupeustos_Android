@@ -1,5 +1,5 @@
 import React from "react"
-import { View, StyleSheet, Text, Image } from "react-native"
+import { View, StyleSheet, Text, Image, Pressable } from "react-native"
 
 import globalStyles from "../styles"
 import { formatQuant } from "../helpers"
@@ -15,34 +15,43 @@ const dictionaryIcons = {
     subscriptions: require('../img/icono_suscripciones.png'),
 }
 
-const Bill = ({ bill }) => {
+const Bill = ({ bill, setModal, setBill }) => {
 
     const { name, date, quantity, category } = bill
 
+    const handleActions = () => {
+        setModal(true)
+        setBill(bill)
+        
+    }
     return (
-        <View style={styles.containerBill}>
+        <Pressable
+            onPress={handleActions}
+        >
+            <View style={styles.containerBill}>
 
-            <View style={styles.content}>
-                <View style={styles.contentainerImage}>
-                    <Image
-                        source={dictionaryIcons[category]}
-                        style={styles.image}
-                    />
+                <View style={styles.content}>
+                    <View style={styles.contentainerImage}>
+                        <Image
+                            source={dictionaryIcons[category]}
+                            style={styles.image}
+                        />
 
-                    <View style={styles.contentainerText}>
-                        <Text style={styles.category}>{category}</Text>
-                        <Text style={styles.name}>{name}</Text>
-                        <Text style={styles.date}>{formatDate(date)}</Text>
+                        <View style={styles.contentainerText}>
+                            <Text style={styles.category}>{category}</Text>
+                            <Text style={styles.name}>{name}</Text>
+                            <Text style={styles.date}>{formatDate(date)}</Text>
+                        </View>
+
                     </View>
+
+
+                    <Text style={styles.quantity}>{formatQuant(quantity)}</Text>
 
                 </View>
 
-
-                <Text style={styles.quantity}>{formatQuant(quantity)}</Text>
-
             </View>
-
-        </View>
+        </Pressable>
     )
 }
 export default Bill
@@ -53,15 +62,15 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     content: {
-        flexDirection:'row',
-        justifyContent:'space-between', 
-        alignItems:'center'
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     contentainerImage: {
-        flexDirection:'row',
-        alignItems:'center',
+        flexDirection: 'row',
+        alignItems: 'center',
         flex: 1
-        
+
     },
     image: {
         width: 80,
@@ -70,26 +79,26 @@ const styles = StyleSheet.create({
     },
     contentainerText: {
         flex: 1,
-        
+
     },
     category: {
-        color:'#94A3B8',
+        color: '#94A3B8',
         fontSize: 16,
         fontWeight: '700',
         textTransform: 'uppercase',
         marginBottom: 5
     },
-    name:{
+    name: {
         fontSize: 22,
         color: '#64748B'
     },
-    quantity:{
+    quantity: {
         fontSize: 20,
         fontWeight: '700'
     },
     date: {
         fontWeight: '700',
-        color:'#DB2777'
+        color: '#DB2777'
     }
 
 

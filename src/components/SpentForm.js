@@ -1,29 +1,60 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable, View, Text, StyleSheet, SafeAreaView, TextInput } from "react-native";
 
 import { Picker } from "@react-native-picker/picker";
 import globalStyles from "../styles";
 
-const SpentForm = ({ setModal, handleBill }) => {
+const SpentForm = ({
+    setModal,
+    handleBill,
+    setBill,
+    bill,
+    deleteBill }) => {
 
     const [name, setName] = useState('')
-    const [quantity, setquantity] = useState('')
+    const [quantity, setQuantity] = useState('')
     const [category, setCategory] = useState('')
+    const [id, setId] = useState('')
+    const [date, setDate] = useState('')
 
+    useEffect(() => {
+        if (bill?.name) {
+            setName(bill.name)
+            setQuantity(bill.quantity)
+            setCategory(bill.category)
+            setId(bill.id)
+            setDate(bill.date)
+        } else {
+            /* console.log("no hay nada") */
+        }
+    }, [bill])
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.containerBtnCancel}>
                 <Pressable
-                    onPress={() => setModal(false)}
-                    style={styles.cancelBtn}
+                    onPress={() => {
+
+                        setModal(false)
+                        setBill({})
+
+                    }}
+                    style={[styles.cancelBtn, styles.btnCancelar]}
                 >
                     <Text style={styles.cancelBtnText}>Cancel</Text>
                 </Pressable>
+
+                {bill?.name &&
+                <Pressable
+                    style={[styles.cancelBtn, styles.btnDelete]}
+                    onPress={()=>deleteBill(id)}
+                >
+                    <Text style={[styles.cancelBtnText]}>Delete</Text>
+                </Pressable>}
             </View>
 
             <View style={styles.form}>
 
-                <Text style={styles.title}>New Spent</Text>
+                <Text style={styles.title}>{bill?.name ? 'Edit Spent' : 'New Spent'}</Text>
 
 
                 <View style={styles.camp}>
@@ -44,14 +75,14 @@ const SpentForm = ({ setModal, handleBill }) => {
                         style={styles.input}
 
                         value={quantity}
-                        onChangeText={setquantity}
+                        onChangeText={setQuantity}
                     />
                 </View>
 
                 <View style={styles.camp}>
                     <Text style={styles.label}>Spent Category</Text>
                     <Picker
-                     style={styles.input}
+                        style={styles.input}
                         selectedValue={category}
                         onValueChange={(itemValue) => {
                             setCategory(itemValue)
@@ -68,12 +99,17 @@ const SpentForm = ({ setModal, handleBill }) => {
                     </Picker>
                 </View>
 
-                <Pressable 
-                style={styles.submitBtn}
-                onPress={() => handleBill({name, quantity, category})}
-                
+                <Pressable
+                    style={styles.submitBtn}
+                    onPress={() => {
+
+                        handleBill({ name, quantity, category, id, date })
+                        setBill({})
+                    }
+                    }
+
                 >
-                    <Text style={styles.submitBtnText}>Add Spent</Text>
+                    <Text style={styles.submitBtnText}>{bill?.name ? 'Edit Spent' : 'Add Spent'}</Text>
                 </Pressable>
             </View>
         </SafeAreaView>
@@ -85,11 +121,13 @@ export default SpentForm
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#1E40AF',
-        flex: 1
+        flex: 1,
+        /* justifyContent:'center' */
     },
 
     form: {
-        ...globalStyles.container
+        ...globalStyles.container,
+
     },
     camp: {
         marginVertical: 10
@@ -125,10 +163,11 @@ const styles = StyleSheet.create({
     },
     cancelBtn: {
         backgroundColor: '#DB2777',
-        padding: 10,
-        marginTop: 20,
-        marginHorizontal: 10,
-        paddingHorizontal: 25,
+        paddingVertical: 20,
+
+        paddingHorizontal: 65,
+
+
 
     },
     cancelBtnText: {
@@ -137,8 +176,18 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center'
     },
-    containerBtnCancel: {
 
+    containerBtnCancel: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: 10,
+
+        marginTop: 20,
+    },
+
+    btnDelete: {
+        backgroundColor: 'red'
     }
+
 
 })
