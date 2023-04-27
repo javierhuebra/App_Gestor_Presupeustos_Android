@@ -13,6 +13,8 @@ import {
   Modal
 } from 'react-native';
 
+
+
 import Header from './src/components/Header';
 import NewBudget from './src/components/NewBudget';
 import ControlBudget from './src/components/ControlButget';
@@ -20,6 +22,10 @@ import SpentForm from './src/components/SpentForm';
 
 import { generateId } from './src/helpers'
 import SpentList from './src/components/SpentList';
+import { Platform } from 'react-native';
+import Filter from './src/components/Filter';
+
+console.log('Versión de Android: ', Platform.Version);
 
 const App = () => {
 
@@ -28,6 +34,8 @@ const App = () => {
   const [bills, setBills] = useState([])
   const [modal, setModal] = useState(false)
   const [bill, setBill] = useState({})
+  const [filter, setFilter] = useState('')
+  const [filterBills, setFilterBills] = useState([])
 
   const handleNewBudget = (budget) => {
     if (Number(budget) > 0) {
@@ -81,14 +89,21 @@ const App = () => {
               billState => billState.id !== id
 
             )
+            const updatedFilterBills = bills.filter(
 
 
-           /*  console.log('----Nuevo dbug-----')
-            console.log('bills', bills)
-            console.log('el id es ', id)
-            console.log('updated bills', updatedBills) */
+              billState => billState.id !== id
+
+            )
+
+
+            /*  console.log('----Nuevo dbug-----')
+             console.log('bills', bills)
+             console.log('el id es ', id)
+             console.log('updated bills', updatedBills) */
 
             setBills(updatedBills)
+            setFilterBills(updatedFilterBills)
             setModal(!modal)
             setBill({})
           }
@@ -132,11 +147,26 @@ const App = () => {
         </View>
 
         {isValidBudget && (
-          <SpentList
-            bills={bills}
-            setModal={setModal}
-            setBill={setBill}
-          />
+          <>
+            <Filter 
+              setFilter={setFilter}
+              filter={filter}
+
+              bills={bills}
+              setFilterBills={setFilterBills}
+            />
+
+            <SpentList
+              bills={bills}
+              setModal={setModal}
+              setBill={setBill}
+
+              filter={filter}
+              filterBills={filterBills}
+
+              setFilter={setFilter}
+            />
+          </>
         )}
 
       </ScrollView>
@@ -151,6 +181,9 @@ const App = () => {
             bill={bill}
             setBill={setBill}
             deleteBill={deleteBill}
+
+            setFilter={setFilter}
+            filterBills={filterBills}
           />
 
         </Modal>

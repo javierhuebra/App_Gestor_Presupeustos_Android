@@ -9,7 +9,9 @@ const SpentForm = ({
     handleBill,
     setBill,
     bill,
-    deleteBill }) => {
+    deleteBill,
+    setFilter,
+    filterBills }) => {
 
     const [name, setName] = useState('')
     const [quantity, setQuantity] = useState('')
@@ -44,12 +46,16 @@ const SpentForm = ({
                 </Pressable>
 
                 {bill?.name &&
-                <Pressable
-                    style={[styles.cancelBtn, styles.btnDelete]}
-                    onPress={()=>deleteBill(id)}
-                >
-                    <Text style={[styles.cancelBtnText]}>Delete</Text>
-                </Pressable>}
+                    <Pressable
+                        style={[styles.cancelBtn, styles.btnDelete]}
+                        onPress={() => {
+                            deleteBill(id)
+                            setFilter('')
+                            }
+                        }
+                    >
+                        <Text style={[styles.cancelBtnText]}>Delete</Text>
+                    </Pressable>}
             </View>
 
             <View style={styles.form}>
@@ -105,6 +111,7 @@ const SpentForm = ({
 
                         handleBill({ name, quantity, category, id, date })
                         setBill({})
+                        setFilter('')
                     }
                     }
 

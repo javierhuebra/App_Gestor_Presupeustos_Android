@@ -3,24 +3,44 @@ import { View, StyleSheet, Text } from "react-native"
 import Bill from "./Bill"
 
 
-const SpentList = ({ bills, setModal, setBill }) => {
+const SpentList = ({ bills, setModal, setBill, filter, filterBills, setFilter }) => {
+
+
     return (
         <View style={styles.containerList}>
             <Text style={styles.title}>Spent List</Text>
 
-            {bills.length === 0 ?
-                <Text style={styles.noBill}>No Expenses</Text>
-                :
-                bills.map(bill => (
-                    <Bill
-                        key={bill.id}
-                        bill={bill}
-                        setModal={setModal}
-                        setBill={setBill}
-                    />
+            {filter ? filterBills.map(bill => (
+                <Bill
+                    key={bill.id}
+                    bill={bill}
+                    setModal={setModal}
+                    setBill={setBill}
+                />
+            )) : bills.map(bill => (
+                <Bill
+                    key={bill.id}
+                    bill={bill}
+                    setModal={setModal}
+                    setBill={setBill}
+                />
+            ))}
+
+            {
+                (bills.length === 0) && (
+                    <Text style={styles.noBill}>No hay gastos</Text>
                 )
+            }
+
+            {
+                (filterBills.length === 0 && bills.length !== 0 && filter !== '') && (
+                 <Text style={styles.noBill}>There are expenses but not in this category</Text>
             
-            )}
+                   )
+            }
+
+
+
         </View>
     )
 }
@@ -28,8 +48,8 @@ export default SpentList
 
 const styles = StyleSheet.create({
     containerList: {
-        marginTop: 70,
-        marginBottom: 100
+        marginTop: 30,
+        marginBottom: 70
     },
 
     title: {
@@ -39,11 +59,12 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         marginTop: 20
     },
-    noBill:{
-        color:'#64748B',
+    noBill: {
+        color: '#64748B',
         marginTop: 20,
         textAlign: 'center',
-        fontSize:20,
-        opacity: 0.5
+        fontSize: 20,
+        opacity: 0.5,
+        marginHorizontal: 100
     }
 })
