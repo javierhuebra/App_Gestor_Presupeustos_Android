@@ -1,6 +1,6 @@
 
 
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 
 import {
   ScrollView,
@@ -10,10 +10,12 @@ import {
   Alert,
   Pressable,
   Image,
-  Modal
+  Modal,
+  Text
 } from 'react-native';
 
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Header from './src/components/Header';
 import NewBudget from './src/components/NewBudget';
@@ -36,6 +38,73 @@ const App = () => {
   const [bill, setBill] = useState({})
   const [filter, setFilter] = useState('')
   const [filterBills, setFilterBills] = useState([])
+  const [modalInfo, setModalInfo] = useState(false)
+
+  useEffect(() => {
+    const obtainBudgetStorage = async () => {
+      try {
+        const budgetStorage = await AsyncStorage.getItem
+          ('planner_budget') ?? 0 //esta bueno el operador para constatar que no sea null
+        console.log('tenes ', budgetStorage)
+
+        if (budgetStorage > 0) {
+          setBudget(budgetStorage)
+          setIsValidBudget(true)
+          /* console.log(isValidBudget) */
+        }
+
+
+      } catch (error) {
+        console.log(error)
+      }
+
+    }
+    obtainBudgetStorage()
+  }, [])
+
+  useEffect(() => {
+    if (isValidBudget) {
+      const saveBudgetStorage = async () => {
+        try {
+          await AsyncStorage.setItem('planner_budget', budget)
+          /* console.log('tengo alguito') */
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      saveBudgetStorage();
+    }
+
+
+
+  }, [isValidBudget])
+
+  useEffect(() => {
+    obtainBillsStorage = async () => {
+      try {
+        const billsStorage = await AsyncStorage.getItem
+          ('planner_bills')
+
+        setBills(billsStorage ? JSON.parse(billsStorage) : [])
+        console.log('gastos en storage', billsStorage)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    obtainBillsStorage()
+  }, [])
+
+  useEffect(() => {
+    const saveBillsStorage = async () => {
+      try {
+        await AsyncStorage.setItem('planner_bills', JSON.stringify
+          (bills))
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    saveBillsStorage();
+  }, [bills])
 
   const handleNewBudget = (budget) => {
     if (Number(budget) > 0) {
@@ -113,6 +182,27 @@ const App = () => {
 
   }
 
+  const resetApp = () => {
+    Alert.alert(
+      'Do you want to reset the app?',
+      'This will eliminate budget and expenses',
+      [
+        { text: 'No', style: 'cancel' },
+        {
+          text: 'Yes, delete', onPress: async () => {
+            try {
+              await AsyncStorage.clear()
+              setIsValidBudget(false)
+              setBudget(0)
+            } catch (error) {
+              console.log(error)
+            }
+          }
+        }
+      ]
+    )
+  }
+
   return (
     <View style={styles.containerBud}>
       <StatusBar
@@ -134,21 +224,53 @@ const App = () => {
             <ControlBudget
               budget={budget}
               bills={bills}
+              resetApp={resetApp}
             />
 
           )
             :
-            (<NewBudget
-              handleNewBudget={handleNewBudget}
-              budget={budget}
-              setBudget={setBudget}
-            />)}
+            (
+              <NewBudget
+                handleNewBudget={handleNewBudget}
+                budget={budget}
+                setBudget={setBudget}
+              />
+
+
+            )}
 
         </View>
 
+        {!isValidBudget && <>
+          <Pressable
+            onPress={() => setModalInfo(true)}
+          >
+            <Text >Info</Text>
+          </Pressable>
+
+          {<Modal
+            visible={modalInfo}
+            animationType='fade'
+            transparent={true}
+          >
+            <View style={styles.infoContainer}>
+            <Text style={styles.infoText}>Gracias por descargar esta app ♥</Text>
+            <Text style={styles.infoText}>Version: 1.0</Text>
+            <Text style={styles.infoText}>Nombre: Expense Planner (Planner)</Text>
+            <Text style={styles.infoText}>Creado por Javier Huebra</Text>
+              <Pressable
+                onPress={() => setModalInfo(false)}
+              >
+                <Text style={styles.infoText}>Cerrar</Text>
+              </Pressable>
+            </View>
+          </Modal>}
+        </>}
+
+
         {isValidBudget && (
           <>
-            <Filter 
+            <Filter
               setFilter={setFilter}
               filter={filter}
 
@@ -225,6 +347,18 @@ const styles = StyleSheet.create({
     right: 30,
     /* backgroundColor:'red' */
 
+  },
+  infoContainer:{
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    flex: 1,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  infoText:{
+    color:'yellowgreen',
+    backgroundColor:'rgba(0,0,0,0.5)',
+    padding:5
+    
   }
 });
 

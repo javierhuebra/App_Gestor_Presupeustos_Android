@@ -1,4 +1,6 @@
 import React from "react";
+
+
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import globalStyles
  from "../styles";
@@ -33,7 +35,8 @@ export default NewBudget
 
 const styles = StyleSheet.create({
     containerBudget: {
-        ...globalStyles.container //se hace un global style a veces se usa
+        ...globalStyles.container, //se hace un global style a veces se usa
+        
     },
     label:{
        textAlign:'center',
