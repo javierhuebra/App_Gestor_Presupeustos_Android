@@ -11,7 +11,8 @@ import {
   Pressable,
   Image,
   Modal,
-  Text
+  Text,
+  Linking
 } from 'react-native';
 
 
@@ -194,6 +195,7 @@ const App = () => {
               await AsyncStorage.clear()
               setIsValidBudget(false)
               setBudget(0)
+              setBills([])
             } catch (error) {
               console.log(error)
             }
@@ -201,6 +203,10 @@ const App = () => {
         }
       ]
     )
+  }
+
+  const handleLink = () => {
+    Linking.openURL('https://www.linkedin.com/in/javieremanuelhuebra/');
   }
 
   return (
@@ -244,8 +250,9 @@ const App = () => {
         {!isValidBudget && <>
           <Pressable
             onPress={() => setModalInfo(true)}
+            style={styles.btnInfo}
           >
-            <Text >Info</Text>
+            <Text style={styles.btnInfoText}>Info</Text>
           </Pressable>
 
           {<Modal
@@ -254,15 +261,25 @@ const App = () => {
             transparent={true}
           >
             <View style={styles.infoContainer}>
-            <Text style={styles.infoText}>Gracias por descargar esta app ♥</Text>
-            <Text style={styles.infoText}>Version: 1.0</Text>
-            <Text style={styles.infoText}>Nombre: Expense Planner (Planner)</Text>
-            <Text style={styles.infoText}>Creado por Javier Huebra</Text>
-              <Pressable
-                onPress={() => setModalInfo(false)}
-              >
-                <Text style={styles.infoText}>Cerrar</Text>
-              </Pressable>
+              <View style={styles.infoCard}>
+                <Text style={styles.infoText}>Gracias por descargar esta app ♥</Text>
+                <Text style={styles.infoText}>Version: 1.0 </Text>
+                <Text style={styles.infoText}>Nombre: Expense Planner (Planner)</Text>
+                <Text style={styles.infoText}>Creado por Javier Huebra 28/04/2023</Text>
+                
+                <Pressable
+                  onPress={() => handleLink()}
+                  style={styles.btnLink}
+                >
+                  <Text style={styles.btnLinkText}>Linkedin</Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => setModalInfo(false)}
+                  style={styles.btnCerrar}
+                >
+                  <Text style={styles.btnCerrarText}>Cerrar</Text>
+                </Pressable>
+              </View>
             </View>
           </Modal>}
         </>}
@@ -348,18 +365,49 @@ const styles = StyleSheet.create({
     /* backgroundColor:'red' */
 
   },
-  infoContainer:{
+  infoContainer: {
     backgroundColor: 'rgba(0,0,0,0.5)',
     flex: 1,
-    justifyContent:'center',
-    alignItems:'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  infoText:{
-    color:'yellowgreen',
-    backgroundColor:'rgba(0,0,0,0.5)',
-    padding:5
+  infoText: {
+    color: 'yellowgreen',
     
-  }
+    padding: 5
+
+  },
+  btnCerrar:{
+  backgroundColor: 'yellowgreen',
+  marginTop:25,
+  padding: 10
+  },
+  btnCerrarText:{
+    textAlign:'center',
+    
+  },
+  infoCard:{
+    backgroundColor: 'rgba(0,0,0,0.4)'
+  },
+  btnInfo:{
+    backgroundColor:'#37AF78',
+    margin:5
+  },
+  btnInfoText:{
+    color: '#FFF',
+    margin: 5,
+    textAlign: 'center'
+  },
+  btnLink:{
+    backgroundColor: 'rgb(10,102,194)',
+    padding: 5,
+    marginHorizontal: 45
+  },
+  btnLinkText:{
+    color: '#FFF',
+    textAlign: 'center',
+    fontWeight:'bold'
+  },
 });
 
 export default App;

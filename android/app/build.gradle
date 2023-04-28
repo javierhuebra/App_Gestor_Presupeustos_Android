@@ -95,7 +95,7 @@ android {
 
     namespace "com.planificador"
     defaultConfig {
-        applicationId "com.planificador"
+        applicationId "com.planif.planner"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
