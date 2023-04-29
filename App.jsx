@@ -255,6 +255,14 @@ const App = () => {
             <Text style={styles.btnInfoText}>Info</Text>
           </Pressable>
 
+          <View style={styles.contImgLogoApp}>
+          <Image
+            source={require('./src/img/logoapp.png')}
+            style={styles.imgLogoApp}
+            
+          />
+          </View>
+
           {<Modal
             visible={modalInfo}
             animationType='fade'
@@ -408,6 +416,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight:'bold'
   },
+  imgLogoApp:{
+    width: 400,
+    height: 400
+  },
+  contImgLogoApp:{
+    
+    alignItems:'center'
+  }
 });
 
 export default App;
